@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let cardsChosen = [];
   let cardsChosenId = [];
   let cardsWon = [];
+  let mistakes = 5;
   const audioMatch = new Audio("./sounds/coin.wav");
   const audioMiss = new Audio("./sounds/error.wav");
   const newGame = document.querySelector(".new-game");
@@ -32,13 +33,14 @@ document.addEventListener("DOMContentLoaded", () => {
   newGame.addEventListener("click", createNewGame);
   function createNewGame() {
     cardsWon = [];
+    mistakes = 5;
     grid.innerHTML = "";
     createBoard();
   }
 
   //create gameboard
   function createBoard() {
-    resultDisplay.textContent = "0";
+    resultDisplay.textContent = mistakes;
     for (let i = 0; i < cardArray.length; i++) {
       let card = document.createElement("img");
       card.setAttribute("src", "images/background-yellow-waves.jpg");
@@ -54,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
     cardsChosenId.push(cardId);
     this.setAttribute("src", cardArray[cardId].img);
     if (cardsChosen.length === 2) {
-      setTimeout(checkForMatch, 200);
+      setTimeout(checkForMatch, 400);
     }
   }
 
@@ -82,15 +84,21 @@ document.addEventListener("DOMContentLoaded", () => {
         "src",
         "images/background-yellow-waves.jpg"
       );
+      mistakes -= 1;
+      resultDisplay.textContent = mistakes;
       audioMiss.play();
       displayAlert("miss");
     }
     cardsChosen = [];
     cardsChosenId = [];
-    resultDisplay.textContent = cardsWon.length;
+    // resultDisplay.textContent = cardsWon.length;
     if (cardsWon.length === cardArray.length / 2) {
       grid.innerHTML = "";
       alert.innerHTML = `You won!`;
+    }
+    if (mistakes === 0) {
+      alert.innerHTML = `Game over`;
+      grid.innerHTML = "";
     }
   }
 
